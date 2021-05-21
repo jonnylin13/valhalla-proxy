@@ -1,13 +1,12 @@
-# Take the official valhalla runner image,
-# remove a few superfluous things and
-# create a new runner image from ubuntu:20.04
-# with the previous runner's artifacts
+# Take the official Valhalla runner image
+# * Remove a few superfluous things and
+# * Create a new runner image from ubuntu:20.04 with the previous runner's artifacts
 
 FROM valhalla/valhalla:run-latest as builder
 LABEL Nils Nolde <nils@gis-ops.com>
 LABEL Jonny Lin <jonnylin@um.co>
 
-# remove some stuff from the original image
+# Remove some stuff from the original image
 RUN cd /usr/local/bin && \
   preserve="valhalla_service valhalla_build_tiles valhalla_build_config valhalla_build_admins valhalla_build_timezones valhalla_build_elevation valhalla_ways_to_edges" && \
   mv $preserve .. && \
@@ -52,7 +51,15 @@ ENV LD_LIBRARY_PATH="/usr/local/lib:${LD_LIBRARY_PATH}"
 
 COPY scripts/runtime/. /valhalla/scripts
 
-# Expose the necessary port
+# Install app
+RUN mkdir -p /valhalla-proxy
+COPY . ./valhalla-proxy
+RUN cd /valhalla-proxy && npm install && cd ..
+
+# Remove unnecessary scripts
+RUN rm -rf /valhalla-proxy/custom_files && rm -rf /valhalla-proxy/scripts
+
+# Expose the necessary ports
 EXPOSE 8002
 EXPOSE 8003
 CMD /valhalla/scripts/run.sh

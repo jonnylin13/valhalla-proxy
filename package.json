@@ -1,0 +1,35 @@
+{
+  "name": "valhalla-proxy",
+  "version": "1.0.0",
+  "description": "[![ci tests](https://github.com/gis-ops/docker-valhalla/actions/workflows/tests.yml/badge.svg)](https://github.com/gis-ops/docker-valhalla/actions/workflows/tests.yml)",
+  "main": "app.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "tap \"test/**/*.test.js\"",
+    "start": "fastify start -l info app.js --port 8003",
+    "dev": "fastify start -w -l info -P app.js --port 8003"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jonnylin13/valhalla-proxy.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jonnylin13/valhalla-proxy/issues"
+  },
+  "homepage": "https://github.com/jonnylin13/valhalla-proxy#readme",
+  "dependencies": {
+    "fastify": "^3.0.0",
+    "fastify-autoload": "^3.3.1",
+    "fastify-cli": "^2.12.0",
+    "fastify-plugin": "^3.0.0",
+    "fastify-sensible": "^3.1.0"
+  },
+  "devDependencies": {
+    "tap": "^15.0.9"
+  }
+}
