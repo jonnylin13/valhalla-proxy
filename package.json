@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/jonnylin13/valhalla-proxy#readme",
   "dependencies": {
+    "axios": "^0.21.1",
     "fastify": "^3.0.0",
     "fastify-autoload": "^3.3.1",
     "fastify-cli": "^2.12.0",
