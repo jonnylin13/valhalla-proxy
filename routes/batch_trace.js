@@ -46,7 +46,6 @@ module.exports = async function (fastify, opts) {
           costing: 'auto'
         });
 
-
         if (matched.data && matched.data.trip) {
 
           const encodedPolyline = matched.data.trip.legs[0].shape;
