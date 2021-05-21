@@ -31,7 +31,6 @@ module.exports = async function (fastify, opts) {
 
     // First run each Valhalla /trace_route
     const traces = []
-    const metadata = []
 
     for (let shape of request.body.shapes) {
 
@@ -50,8 +49,6 @@ module.exports = async function (fastify, opts) {
 
         if (matched.data && matched.data.trip) {
 
-          traces.push(matched.data)
-
           const encodedPolyline = matched.data.trip.legs[0].shape;
 
           // Then run each Valhalla /trace_attributes
@@ -63,7 +60,10 @@ module.exports = async function (fastify, opts) {
           });
 
           if (meta.data) {
-            metadata.push(meta.data)
+            traces.push({
+              route: matched.data,
+              attributes: meta.data
+            })
           }
 
         }
@@ -74,9 +74,6 @@ module.exports = async function (fastify, opts) {
 
     }
 
-    console.log(traces)
-    console.log(metadata)
-
-    return {success: true, traces, metadata}
+    return {success: true, traces}
   })
 }
