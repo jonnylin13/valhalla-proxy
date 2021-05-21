@@ -57,7 +57,7 @@ COPY . ./valhalla-proxy
 RUN cd /valhalla-proxy && npm install && cd ..
 
 # Remove unnecessary scripts
-RUN rm -rf /valhalla-proxy/custom_files && rm -rf /valhalla-proxy/scripts
+# RUN rm -rf /valhalla-proxy/custom_files && rm -rf /valhalla-proxy/scripts
 
 # Expose the necessary ports
 EXPOSE 8002

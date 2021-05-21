@@ -1,14 +1,17 @@
 [![ci tests](https://github.com/gis-ops/docker-valhalla/actions/workflows/tests.yml/badge.svg)](https://github.com/gis-ops/docker-valhalla/actions/workflows/tests.yml)
 
-# Valhalla Docker image by GIS • OPS
+# Valhalla Docker image by GIS • OPS & Near (UM)
 
 A hyper-flexible Docker image for the excellent [Valhalla](https://github.com/valhalla/valhalla) routing framework.
 
 ```bash
-docker run -dt --name valhalla_gis-ops -p 8002:8002 -v $PWD/custom_files:/custom_files gisops/valhalla:latest
+docker build . -t jonnylin13/valhalla-proxy # Or specify your own image name
+docker run -dt --name valhalla-proxy -p 8002:8002 -p 8003:8003 -v $PWD/custom_files:/custom_files jonnylin13/valhalla-proxy
 ```
 
 This image aims at being user-friendly and most efficient with your time and resources. Once built, you can easily change Valhalla's configuration, the underlying OSM data graphs are built from, accompanying data (like Admin Areas, elevation tiles) or even pre-built graph tiles. Upon `docker restart <container>` those changes are taken into account via **hashed files**, and, if necessary, new graph tiles will be built automatically.
+
+It also provides a proxy API layer using Fastify and Node.js that sits concurrent with Valhalla, mainly for batching multiple requests or performing logic separate from the Valhalla service.
 
 ## Features
 
@@ -17,25 +20,6 @@ This image aims at being user-friendly and most efficient with your time and res
 -   Load and build from **multiple URLs** pointing to valid pbf files.
 -   Load local data through volume mapping.
 -   **Supports auto rebuild** on OSM file changes through hash mapping.
-
-## Dockerhub
-
-In the [Dockerhub repository](https://hub.docker.com/r/gisops/valhalla) you'll find the following images/tags:
-
-- stable release tags (e.g. 3.0.9)
-- `latest`, updated from Valhalla Github repository every Saturday morning
-
-## Build the image
-
-If you want to build the image yourself, be aware that you might need to adapt the base image in the `Dockerfile` to reflect the version of Valhalla you'd like to build. You can find the tags of the `valhalla/valhalla:run-*` images here: https://hub.docker.com/r/valhalla/valhalla/tags.
-
-**Note**, that this is only valid down to `3.1.0`, before the building scheme was completely different. Please contact enquiry@gis-ops.com if you need access to previous Valhalla versions via Docker.
-
-Then it's a simple
-
-```shell script
-docker build -t gisops/valhalla .
-```
 
 ## Environment variables
 
@@ -101,3 +85,5 @@ sudo ./tests/test.sh
 ## Acknowledgements
 
 This project was first introduced by [MichaelsJP](https://github.com/MichaelsJP).
+The second version was created by [GISOPS](https://github.com/gis-ops).
+The third version which introduced a proxy API layer was created by [jonnylin13](https://github.com/jonnylin13).
