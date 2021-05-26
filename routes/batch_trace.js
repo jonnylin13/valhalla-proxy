@@ -1,24 +1,35 @@
 'use strict'
 
-const axios = require('axios')
+const valhallaCfg = require('../valhalla.json')
+const Valhalla = require('/usr/local/src/valhalla/lib')(JSON.stringify(valhallaCfg))
+const valhalla = new Valhalla(JSON.stringify(valhallaCfg))
 
-const VALHALLA_API = 'http://localhost:8002'
-// TODO: Implement defaults
-// const DEFAULT_TRACE_OPTIONS = {
-//   search_radius: 10,
-//   gps_accuracy: 10,
-//   use_bus: 0.5,
-//   use_rail: 0.5,
-//   shape_match: 'map_snap',
-//   costing: 'auto'
-// }
-// const DEFAULT_ATTR_OPTIONS = {
-//   shape_match: 'edge_walk',
-//   costing: 'auto',
-//   action: 'include'
-// }
+function traceRoute(request) {
+  return new Promise((resolve, reject) => {
+    valhalla.traceRoute(request, (err, result) => {
+      if (err) {
+        reject(err)
+        return
+      }
+      resolve(JSON.parse(result))
+    })
+  })
+}
+
+function traceAttributes(request) {
+  return new Promise((resolve, reject) => {
+    valhalla.traceAttributes(request, (err, result) => {
+      if (err) {
+        reject(err)
+        return
+      }
+      resolve(JSON.parse(result))
+    })
+  })
+}
 
 module.exports = async function (fastify, opts) {
+
   fastify.post('/batch_trace', async function (request, reply) {
 
     // Should take an array of Valhalla requests
@@ -31,48 +42,47 @@ module.exports = async function (fastify, opts) {
 
     // First run each Valhalla /trace_route
     const traces = []
+    const errors = []
 
     for (let shape of request.body.shapes) {
 
+      const traceRouteRequest = JSON.stringify({
+        shape,
+        // search_radius: 10,
+        // gps_accuracy: 10,
+        // use_bus: 0.5,
+        // use_rail: 0.5,
+        shape_match: 'map_snap',
+        costing: 'auto'
+      })
+
       try {
 
-        const matched = await axios.post(`${VALHALLA_API}/trace_route`, {
-          shape,
-          search_radius: 10,
-          gps_accuracy: 10,
-          use_bus: 0.5,
-          use_rail: 0.5,
-          shape_match: 'map_snap',
-          costing: 'auto'
-        });
+        const trace = await traceRoute(traceRouteRequest)
 
-        if (matched.data && matched.data.trip) {
+        if (trace.trip) {
+          const encoded_polyline = trace.trip.legs[0].shape
 
-          const encodedPolyline = matched.data.trip.legs[0].shape;
-
-          // Then run each Valhalla /trace_attributes
-          const meta = await axios.post(`${VALHALLA_API}/trace_attributes`, {
-            encoded_polyline: encodedPolyline,
+          const traceAttrRequest = JSON.stringify({
+            encoded_polyline,
             shape_match: 'edge_walk',
             costing: 'auto',
             action: 'include'
-          });
+          })
 
-          if (meta.data) {
-            traces.push({
-              route: matched.data,
-              attributes: meta.data
-            })
-          }
-
+          const attributes = await traceAttributes(traceAttrRequest)
+          traces.push({
+            route: trace,
+            attributes
+          })
         }
 
       } catch (err) {
-        // TODO: Handle errors
+        errors.push(err)
       }
 
     }
 
-    return {success: true, traces}
+    return {success: true, traces, errors}
   })
 }

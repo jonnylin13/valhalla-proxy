@@ -2,7 +2,7 @@
 # * Remove a few superfluous things and
 # * Create a new runner image from ubuntu:20.04 with the previous runner's artifacts
 
-FROM valhalla/valhalla:run-latest as builder
+FROM jonnylin13/node-valhalla:run-3.1.1 as builder
 LABEL Nils Nolde <nils@gis-ops.com>
 LABEL Jonny Lin <jonnylin@um.co>
 
@@ -32,7 +32,7 @@ RUN apt-get update > /dev/null && \
 RUN mkdir -p /usr/local/nvm
 
 ENV NVM_DIR      /usr/local/nvm
-ENV NODE_VERSION 14
+ENV NODE_VERSION 10.22.0
 ENV NODE_PATH    $NVM_DIR/v$NODE_VERSION/lib/node_modules
 ENV PATH         $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 
