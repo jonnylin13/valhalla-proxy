@@ -53,6 +53,7 @@ COPY scripts/runtime/. /valhalla/scripts
 RUN mkdir -p /valhalla-proxy
 COPY . ./valhalla-proxy
 RUN cd /valhalla-proxy && npm install && cd ..
+RUN npm i -g pm2
 
 # Remove unnecessary scripts
 # RUN rm -rf /valhalla-proxy/custom_files && rm -rf /valhalla-proxy/scripts
