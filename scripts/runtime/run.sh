@@ -48,7 +48,7 @@ fi
 
 if test -f ${CUSTOM_CONFIG}; then
   echo "Found config file. Starting valhalla service!"
-  cd valhalla-proxy && npm start & valhalla_service ${CUSTOM_CONFIG} ${server_threads}
+  cd valhalla-proxy && npm run start-pm2 && valhalla_service ${CUSTOM_CONFIG} ${server_threads}
 else
   echo "No config found!"
 fi

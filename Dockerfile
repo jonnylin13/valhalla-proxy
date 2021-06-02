@@ -4,7 +4,6 @@
 
 FROM jonnylin13/node-valhalla:run-3.1.1 as builder
 LABEL Nils Nolde <nils@gis-ops.com>
-LABEL Jonny Lin <jonnylin@um.co>
 
 # Remove some stuff from the original image
 RUN cd /usr/local/bin && \
@@ -15,7 +14,6 @@ RUN cd /usr/local/bin && \
 
 FROM ubuntu:20.04 as runner
 LABEL Nils Nolde <nils@gis-ops.com>
-LABEL Jonny Lin <jonnylin@um.co>
 
 RUN apt-get update > /dev/null && \
     export DEBIAN_FRONTEND=noninteractive && \

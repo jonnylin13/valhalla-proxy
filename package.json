@@ -9,7 +9,9 @@
   "scripts": {
     "test": "tap \"test/**/*.test.js\"",
     "start": "fastify start -l info app.js --port 8003",
-    "dev": "fastify start -w -l info -P app.js --port 8003"
+    "dev": "fastify start -w -l info -P app.js --port 8003",
+    "start-pm2": "pm2 start 'npm run start' --name valhalla-proxy",
+    "stop-pm2": "pm2 stop valhalla-proxy"
   },
   "repository": {
     "type": "git",
@@ -27,7 +29,8 @@
     "fastify-autoload": "^3.3.1",
     "fastify-cli": "^2.12.0",
     "fastify-plugin": "^3.0.0",
-    "fastify-sensible": "^3.1.0"
+    "fastify-sensible": "^3.1.0",
+    "pm2": "^4.5.6"
   },
   "devDependencies": {
     "tap": "^15.0.9"
