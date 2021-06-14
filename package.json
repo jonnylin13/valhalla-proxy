@@ -8,8 +8,8 @@
   },
   "scripts": {
     "test": "tap \"test/**/*.test.js\"",
-    "start": "fastify start -l info app.js --port 8003",
-    "dev": "fastify start -w -l info -P app.js --port 8003",
+    "start": "fastify start -l info app.js",
+    "dev": "fastify start -w -l info -P app.js",
     "start-pm2": "pm2 start 'npm start' --name valhalla-proxy",
     "stop-pm2": "pm2 stop valhalla-proxy",
     "delete-pm2": "pm2 delete valhalla-proxy"
