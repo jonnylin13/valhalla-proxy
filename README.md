@@ -1,6 +1,6 @@
 [![ci tests](https://github.com/gis-ops/docker-valhalla/actions/workflows/tests.yml/badge.svg)](https://github.com/gis-ops/docker-valhalla/actions/workflows/tests.yml)
 
-# Valhalla Docker image by GIS • OPS & Near (UM)
+# Valhalla Docker image by GIS • OPS
 
 A hyper-flexible Docker image for the excellent [Valhalla](https://github.com/valhalla/valhalla) routing framework.
 
